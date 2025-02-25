@@ -88,7 +88,7 @@ public class CartService {
         }
 
         // If confirmation is needed, return response without updating the cart
-        if (!itemsNeedingConfirmation.isEmpty() && !confirmAddition) {
+        if (!itemsNeedingConfirmation.isEmpty()) {
             return new CartResponse(false,
                     "The following items already exist in the cart: " + String.join(", ", itemsNeedingConfirmation)
                             + ". Do you want to add more?", cart);

@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -44,9 +45,16 @@ public class AuthController {
                 return ResponseEntity.status(401).body("Invalid credentials");
             }
 
+            // Check if this is the user's first login
+            boolean isFirstLogin = (user.getLastLogin() == null);
+
+            // Update lastLogin field
+            user.setLastLogin(new Date());
+            usersRepository.save(user);
+
             // Generate JWT token
             String token = jwtUtil.generateToken(user.getEmailId());
-            return ResponseEntity.ok(new AuthResponse(token, user));
+            return ResponseEntity.ok(new AuthResponse(token, user, isFirstLogin));
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred");
         }
@@ -77,10 +85,12 @@ public class AuthController {
     public static class AuthResponse {
         private String token;
         private Users user;
+        private boolean firstLogin;
 
-        public AuthResponse(String token, Users user) {
+        public AuthResponse(String token, Users user, boolean isFirstLogin) {
             this.token = token;
             this.user = user;
+            this.firstLogin = isFirstLogin;
         }
 
         public String getToken() {
@@ -97,6 +107,14 @@ public class AuthController {
 
         public void setUser(Users user) {
             this.user = user;
+        }
+
+        public boolean isFirstLogin() {
+            return firstLogin;
+        }
+
+        public void setFirstLogin(boolean firstLogin) {
+            this.firstLogin = firstLogin;
         }
     }
 }

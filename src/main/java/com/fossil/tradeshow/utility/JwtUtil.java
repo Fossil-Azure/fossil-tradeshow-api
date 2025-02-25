@@ -24,11 +24,15 @@ public class JwtUtil {
     // Generate JWT Token using modern builder-style methods
     public String generateToken(String username) {
         return Jwts.builder()
-                .subject(username) // Use modern method for subject
-                .issuedAt(new Date()) // Use modern method for issuedAt
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(key) // Sign with the SecretKey
-                .compact(); // Build and return the JWT token
+                .header() // Correct way to set headers
+                .add("alg", "HS256")
+                .add("typ", "JWT")
+                .and() // Move back to builder
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity
+                .signWith(key) // Correct signing method
+                .compact();
     }
 
     // Extract Username from the Token

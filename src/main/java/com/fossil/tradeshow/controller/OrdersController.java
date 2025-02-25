@@ -3,12 +3,14 @@ package com.fossil.tradeshow.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fossil.tradeshow.model.Orders;
 import com.fossil.tradeshow.service.OrdersService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/orders")
@@ -51,12 +53,10 @@ public class OrdersController {
             updatedOrder.setEmailId(existingOrder.getEmailId());
 
             Orders savedOrder = orderService.updateOrder(updatedOrder);
-            System.out.print(savedOrder);
             return ResponseEntity.ok(savedOrder);
 
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
-
 }

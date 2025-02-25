@@ -19,6 +19,8 @@ public class Product {
 
     private String platform;
 
+    private String Category;
+
     private List<String> ean;
 
     private List<String> upc;
@@ -165,5 +167,13 @@ public class Product {
 
     public void setSizes(List<String> sizes) {
         this.sizes = sizes;
+    }
+
+    public String getCategory() {
+        return Category;
+    }
+
+    public void setCategory(String category) {
+        Category = category;
     }
 }

@@ -3,6 +3,8 @@ package com.fossil.tradeshow.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = "users")
 public class Users {
 
@@ -24,6 +26,8 @@ public class Users {
     private String currency;
 
     private String company;
+
+    private Date lastLogin;
 
     public String getEmailId() {
         return emailId;
@@ -95,5 +99,13 @@ public class Users {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
     }
 }
