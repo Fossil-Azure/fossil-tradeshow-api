@@ -1,10 +1,12 @@
 package com.fossil.tradeshow.service;
 
 import com.fossil.tradeshow.model.Rating;
+import com.fossil.tradeshow.model.RatingResponse;
 import com.fossil.tradeshow.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,13 +28,15 @@ public class RatingService {
         }
     }
 
-    public double getAverageRating(String productSku) {
-        var ratings = ratingRepository.findAll()
-                .stream().filter(r -> r.getProductSku().equals(productSku))
+    public RatingResponse getRatingsWithAverage(String productSku) {
+        List<Rating> ratings = ratingRepository.findAll()
+                .stream()
+                .filter(r -> r.getProductSku().equals(productSku))
                 .toList();
 
-        if (ratings.isEmpty()) return 0;
+        double averageRating = ratings.stream().mapToInt(Rating::getRating).average().orElse(0);
 
-        return ratings.stream().mapToInt(Rating::getRating).average().orElse(0);
+        return new RatingResponse(ratings, averageRating);
     }
+
 }

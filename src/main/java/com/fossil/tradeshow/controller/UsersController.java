@@ -1,10 +1,10 @@
 package com.fossil.tradeshow.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.fossil.tradeshow.model.Users;
 import com.fossil.tradeshow.service.AuthService;
 import com.fossil.tradeshow.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +32,13 @@ public class UsersController {
     public ResponseEntity<List<Users>> getAllUsers() {
         List<Users> allUsers = usersService.getAllUsers();
         return ResponseEntity.ok(allUsers);
+    }
+
+    @GetMapping(value = "/getUser/{emailId}")
+    public ResponseEntity<Users> getUserDetails(@PathVariable String emailId) {
+        return usersService.getUserData(emailId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping("/update-password")

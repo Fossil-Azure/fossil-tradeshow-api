@@ -1,6 +1,7 @@
 package com.fossil.tradeshow.controller;
 
 import com.fossil.tradeshow.model.Rating;
+import com.fossil.tradeshow.model.RatingResponse;
 import com.fossil.tradeshow.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class RatingController {
     }
 
     @GetMapping("/avg-rating/{productSku}")
-    public double getAverageRating(@PathVariable String productSku) {
-        return ratingService.getAverageRating(productSku);
+    public RatingResponse getAverageRating(@PathVariable String productSku) {
+        return ratingService.getRatingsWithAverage(productSku);
     }
 }
